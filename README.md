@@ -19,3 +19,4 @@ Buzzer, led, 8x8 Matrix ve LCD kontrolü yapılabilmekte. App'in çalışması i
 <img src="https://user-images.githubusercontent.com/58305294/139428488-ea28049e-0b9e-4d0d-98d7-b0d6043b7165.jpeg" width="525" height="730">
 
 
+# bluetooth_control
