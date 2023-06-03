@@ -21,7 +21,7 @@ class BluetoothDeviceListEntry extends StatelessWidget {
              width: MediaQuery.of(context).size.width/5,
              child: Align(
                alignment: Alignment.center,
-               child:Text('Bağlan',style: TextStyle(color: Colors.grey[400]),)
+               child:Text('Kết nối',style: TextStyle(color: Colors.grey[400]),)
              ),
           ),
         ),

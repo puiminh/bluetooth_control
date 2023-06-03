@@ -56,7 +56,7 @@ class _ChatPageState extends State<ChatPage>
     super.initState();
 
     _colorlist = genrateColorslist();
-    _controller = TabController(length: 6, vsync: this, initialIndex: 0);
+    _controller = TabController(length: 3, vsync: this, initialIndex: 0);
 
     BluetoothConnection.toAddress(widget.server!.address).then((_connection) {
       print('Cihaza bağlanıldı');
@@ -104,19 +104,14 @@ class _ChatPageState extends State<ChatPage>
           controller: _controller,
           tabs: [
             Tab(
-              text: "Buzzer",
+              text: "Điều khiển nút",
             ),
             Tab(
-              text: "Led",
+              text: "Điều khiển giọng nói",
             ),
             Tab(
-              text: "Led 2",
+              text: "Gửi tin nhắn",
             ),
-            Tab(
-              text: "LCD",
-            ),
-            Tab(text: "Matrix"),
-            Tab(text: "Mesafe"),
           ],
         ),
       ),
@@ -145,13 +140,6 @@ class _ChatPageState extends State<ChatPage>
           ),
           Align(
             alignment: Alignment.center,
-            child: ledPage2(
-              sendMessageA: () => _sendMessage('a'),
-              sendMessageK: () => _sendMessage('k'),
-            ),
-          ),
-          Align(
-            alignment: Alignment.center,
             child: Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: MediaQuery.of(context).size.width / 10),
@@ -163,7 +151,7 @@ class _ChatPageState extends State<ChatPage>
                       TextField(
                         controller: lcdController,
                         decoration: InputDecoration(
-                          hintText: "LCD ekranda gösterilecek yazıyı giriniz.",
+                          hintText: "Nhập tin nhắn",
                         ),
                       ),
                       IconButton(
@@ -177,138 +165,6 @@ class _ChatPageState extends State<ChatPage>
                           },
                           icon: Icon(Icons.clear))
                     ]),
-              ),
-            ),
-          ),
-          AnimatedStack(
-            backgroundColor: Colors.black,
-            fabBackgroundColor: Colors.white,
-            foregroundWidget: Container(
-              decoration: BoxDecoration(
-                color: Color(0xFF2d2d2d),
-              ),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 55),
-                child: GridView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 8,
-                    ),
-                    itemCount: 8 * 8,
-                    itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                        onTap: () {
-                          btnColorChange();
-                          if (_colorlist[index] == Colors.red) {
-                            setState(() {
-                              _colorlist[index] = Colors.black;
-                            });
-                            _sendMessage(index.toString() + "+0");
-                          } else {
-                            setState(() {
-                              _colorlist[index] = Colors.red;
-                            });
-                            _sendMessage(index.toString() + "+1");
-                          }
-
-                          print(index.toString());
-                          print(index.toString());
-                        },
-                        child: Container(
-                          margin: EdgeInsets.all(1),
-                          decoration: BoxDecoration(
-                            color: _colorlist[index],
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      );
-                    }),
-              ),
-            ),
-            columnWidget: Column(
-              children: [
-                IconButton(
-                    onPressed: () {
-                      _sendMessage('c');
-                    },
-                    icon: Icon(Icons.face)),
-                SizedBox(
-                  height: 15,
-                ),
-                IconButton(
-                    onPressed: () {
-                      _sendMessage('d');
-                    },
-                    icon: Icon(Icons.car_repair)),
-                SizedBox(
-                  height: 15,
-                ),
-                IconButton(
-                    onPressed: () {
-                      _sendMessage('e');
-                    },
-                    icon: Icon(Icons.arrow_upward_outlined)),
-                SizedBox(
-                  height: 15,
-                ),
-                IconButton(
-                    onPressed: () {
-                      _sendMessage('f');
-                    },
-                    icon: Icon(Icons.arrow_downward_outlined)),
-                SizedBox(
-                  height: 15,
-                ),
-                IconButton(
-                    onPressed: () {
-                      _sendMessage('g');
-                    },
-                    icon: Icon(Icons.arrow_back_outlined)),
-                SizedBox(
-                  height: 15,
-                ),
-                IconButton(
-                    onPressed: () {
-                      _sendMessage('h');
-                    },
-                    icon: Icon(Icons.arrow_forward_outlined)),
-              ],
-            ),
-            bottomWidget: Align(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 55),
-                child: GestureDetector(
-                  onTap: () {
-                    int i;
-                    _sendMessage('j');
-                    setState(() {
-                      for (i = 0; i < 64;i++){
-                        _colorlist[i] = Colors.black;
-                      } 
-                    });
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.all(Radius.circular(15))),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text("Matrix'i temizle",
-                              style: TextStyle(
-                                color: Colors.white,
-                              )),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Icon(Icons.clear)
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
               ),
             ),
           ),
@@ -347,6 +203,7 @@ class _ChatPageState extends State<ChatPage>
     if (text.length > 0) {
       try {
         connection!.output.add(Uint8List.fromList(utf8.encode(text)));
+
         await connection!.output.allSent;
       } catch (e) {
         // Ignore error, but notify state
