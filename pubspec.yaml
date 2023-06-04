@@ -41,6 +41,7 @@ dependencies:
   speech_to_text: ^6.1.1
   avatar_glow: ^2.0.2
   highlight_text: ^1.6.0
+  hold_down_button: ^1.0.0
 
 dev_dependencies:
   flutter_test:

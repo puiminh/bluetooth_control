@@ -5,8 +5,8 @@ import 'dart:convert';
 
 import 'dart:typed_data';
 import 'package:animated_stack/animated_stack.dart';
-import 'package:buzzer_arduino/buzzer_page.dart';
-import 'package:buzzer_arduino/led_page.dart';
+import 'package:buzzer_arduino/control.dart';
+import 'package:buzzer_arduino/speech.dart';
 import 'package:buzzer_arduino/led_page2.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -121,21 +121,22 @@ class _ChatPageState extends State<ChatPage>
           Padding(
               padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 95),
               child: buzzerPage(
-                sendMessage1: () => _sendMessage('1'),
-                sendMessage2: () => _sendMessage('2'),
-                sendMessage3: () => _sendMessage('3'),
-                sendMessage4: () => _sendMessage('4'),
-                sendMessage5: () => _sendMessage('5'),
-                sendMessage6: () => _sendMessage('6'),
-                sendMessage7: () => _sendMessage('7'),
-                sendMessage8: () => _sendMessage('8'),
-                sendMessage9: () => _sendMessage('9'),
+                sendMessageA: () => _sendMessage('A'),
+                sendMessageW: () => _sendMessage('W'),
+                sendMessageS: () => _sendMessage('S'),
+                sendMessageD: () => _sendMessage('D'),
+                sendMessageX: () => _sendMessage('X'),
+                sendMessageZ: () => _sendMessage('Z'),
               )),
           Align(
             alignment: Alignment.center,
             child: ledPage(
-              sendMessageA: () => _sendMessage('a'),
-              sendMessageK: () => _sendMessage('k'),
+              sendMessageA: () => _sendMessage('A'),
+              sendMessageW: () => _sendMessage('W'),
+              sendMessageS: () => _sendMessage('S'),
+              sendMessageD: () => _sendMessage('D'),
+              sendMessageX: () => _sendMessage('X'),
+              sendMessageZ: () => _sendMessage('Z'),
             ),
           ),
           Align(
@@ -168,24 +169,6 @@ class _ChatPageState extends State<ChatPage>
               ),
             ),
           ),
-          StreamBuilder<String>(
-            stream: mineController.stream.asBroadcastStream(),
-            builder: (context, AsyncSnapshot<String> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 100, vertical: 150),
-                  child: CircularProgressIndicator(),
-                );
-              }
-              return Center(
-                child: Text(
-                  snapshot.data ?? denemee,
-                  style: TextStyle(fontSize: 50, color: Colors.black),
-                ),
-              );
-            },
-          )
         ],
       ),
     );
@@ -199,7 +182,7 @@ class _ChatPageState extends State<ChatPage>
 
   _sendMessage(String text) async {
     text = text.trim();
-
+    print("Sending: "+ text);
     if (text.length > 0) {
       try {
         connection!.output.add(Uint8List.fromList(utf8.encode(text)));

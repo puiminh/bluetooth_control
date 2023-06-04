@@ -11,9 +11,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Bluetooth Buzzer',
-      theme: ThemeData(
-          colorScheme: ColorScheme.dark(
-              secondary: Color(666666), primary: Color(0xFF075E54))),
       home: FutureBuilder(
         future: FlutterBluetoothSerial.instance.requestEnable(),
         builder: (BuildContext context, future) {
