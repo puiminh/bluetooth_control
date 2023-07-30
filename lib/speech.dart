@@ -24,44 +24,13 @@ class ledPage extends StatefulWidget {
 }
 
 class _ledPageState extends State<ledPage> {
-
-  final Map<String, HighlightedWord> _highlights = {
-    'trái': HighlightedWord(
-      textStyle: const TextStyle(
-        color: Colors.blue,
-        fontWeight: FontWeight.bold,
-      )
-    ),
-    'phải': HighlightedWord(
-        textStyle: const TextStyle(
-          color: Colors.blue,
-          fontWeight: FontWeight.bold,
-        )
-    ),
-    'dừng': HighlightedWord(
-        textStyle: const TextStyle(
-          color: Colors.blue,
-          fontWeight: FontWeight.bold,
-        )
-    ),
-    'thẳng': HighlightedWord(
-        textStyle: const TextStyle(
-          color: Colors.blue,
-          fontWeight: FontWeight.bold,
-        )
-    ),
-    'lùi': HighlightedWord(
-        textStyle: const TextStyle(
-          color: Colors.blue,
-          fontWeight: FontWeight.bold,
-        )
-    ),
-  };
-
   late stt.SpeechToText _speech;
   bool _isListening = false;
-  String _text = "Record";
-  double _confidence = 1.0;
+  String _text = "Speak something...";
+  String _oldText = "";
+  String _currentText = "";
+  IconData _icon = Icons.mic;
+
 
   @override
   void initState() {
@@ -73,9 +42,6 @@ class _ledPageState extends State<ledPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Confidence: $_confidence'),
-      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: AvatarGlow(
         animate: _isListening,
@@ -92,24 +58,47 @@ class _ledPageState extends State<ledPage> {
         reverse: true,
         child: Container(
           padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 150.0),
-          child: TextHighlight(
-            text: _text,
-            words: _highlights,
-            textStyle: const TextStyle(
-              fontSize: 32.0,
-              color: Colors.black,
-              fontWeight: FontWeight.w400
-            ),
-          ),
+          child: Column(
+            children: [
+              Container(
+                child: Text(
+                            _text,
+                            style: const TextStyle(
+                                fontSize: 32.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400
+                            ),
+                        ),
+              ),
+              Container(
+                width: 200,
+                height: 300,
+                  child: Icon(_icon)
+              )
+            ],
+
+          )
         ),
       ),
     );
   }
 
+  void reset() {
+    _isListening = false;
+    _text = "Speak something...";
+    _currentText = "";
+    _oldText = "";
+    _icon = Icons.mic;
+  }
+
   void _listen() async {
     if (!_isListening) {
       bool available = await _speech.initialize(
-        onStatus: (val) => print('onStatus: $val'),
+        onStatus: (val) => {
+          if (val == "notListening") {
+            reset()
+          }
+        },
         onError: (val) => print('onErr: $val'),
       );
       if (available) {
@@ -117,51 +106,91 @@ class _ledPageState extends State<ledPage> {
         _speech.listen(
           onResult: (val) => setState(() {
             _text = val.recognizedWords;
-            if (val.hasConfidenceRating && val.confidence > 0) {
-              _confidence = val.confidence;
-            }
 
-            print('Đã nhận dạng từ: $_text');
+
+            if (_text.length >= _oldText.length) {
+              _currentText = _text.substring(_oldText.length);
+            }
+            print('Đã nhận dạng từ: $_text - $_oldText - $_currentText');
+
+            _oldText = _text;
 
             // Tách đoạn văn thành các từ riêng lẻ
-            List<String> words = _text.split(' ');
+            List<String> words = _currentText.split(' ');
 
             // Kiểm tra từng từ trong đoạn văn
             for (String word in words) {
-              if (_highlights.containsKey(word)) {
-                print('Đã bắt được keyword: $word');
+              print('Xét từ: $word');
                 switch (word) {
                   case 'phải':
                     widget.sendMessageD();
-                    _text = "->";
+                    _icon = Icons.arrow_circle_right;
+                    break;
+                  case 'right':
+                    widget.sendMessageD();
+                    _icon = Icons.arrow_circle_right;
                     break;
                   case 'trái':
                     widget.sendMessageA();
-                    _text = "<-";
+                    _icon = Icons.arrow_circle_left;
                     break;
-                  case 'dừng':
+                  case 'left':
+                    widget.sendMessageA();
+                    _icon = Icons.arrow_circle_left;
+                    break;
+                  case 'bật':
                     widget.sendMessageX();
-                    _text = "||";
+                    _icon = Icons.play_circle;
                     break;
-                  case 'lùi':
-                    widget.sendMessageS();
-                    _text = "v";
+                  case 'on':
+                    widget.sendMessageX();
+                    _icon = Icons.play_circle;
+                    break;
+                  case 'tắt':
+                    widget.sendMessageZ();
+                    _icon = Icons.flash_off;
+                    break;
+                  case 'off':
+                    widget.sendMessageZ();
+                    _icon = Icons.flash_off;
                     break;
                   case 'thẳng':
                     widget.sendMessageW();
-                    _text = "^";
+                    _icon = Icons.arrow_circle_up;
+                    break;
+                  case 'tiến':
+                    widget.sendMessageW();
+                    _icon = Icons.arrow_circle_up;
+                    break;
+                  case 'straight':
+                    _icon = Icons.arrow_circle_up;
+                    widget.sendMessageW();
+                    break;
+                  case 'lùi':
+                    widget.sendMessageS();
+                    _icon = Icons.arrow_circle_down;
+                    break;
+                  case 'quay lại':
+                    widget.sendMessageS();
+                    _icon = Icons.arrow_circle_down;
+                    break;
+                  case 'back':
+                    widget.sendMessageS();
+                    _icon = Icons.arrow_circle_down;
                     break;
                 // Xử lý các từ khác trong danh sách _highlights tại đây
                   default:
                     break;
                 }
-              }
             }
+            words = [];
           }),
         );
       } else {
         setState(() => _isListening = false);
         _speech.stop();
+
+        reset();
       }
     }
   }

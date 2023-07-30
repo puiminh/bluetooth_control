@@ -7,7 +7,6 @@ import 'dart:typed_data';
 import 'package:animated_stack/animated_stack.dart';
 import 'package:buzzer_arduino/control.dart';
 import 'package:buzzer_arduino/speech.dart';
-import 'package:buzzer_arduino/led_page2.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -121,22 +120,22 @@ class _ChatPageState extends State<ChatPage>
           Padding(
               padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 95),
               child: buzzerPage(
-                sendMessageA: () => _sendMessage('A'),
-                sendMessageW: () => _sendMessage('W'),
-                sendMessageS: () => _sendMessage('S'),
-                sendMessageD: () => _sendMessage('D'),
-                sendMessageX: () => _sendMessage('X'),
-                sendMessageZ: () => _sendMessage('Z'),
+                sendMessageA: () => _sendMessage('a'),
+                sendMessageW: () => _sendMessage('w'),
+                sendMessageS: () => _sendMessage('s'),
+                sendMessageD: () => _sendMessage('d'),
+                sendMessageX: () => _sendMessage('n'),
+                sendMessageZ: () => _sendMessage('f'),
               )),
           Align(
             alignment: Alignment.center,
             child: ledPage(
-              sendMessageA: () => _sendMessage('A'),
-              sendMessageW: () => _sendMessage('W'),
-              sendMessageS: () => _sendMessage('S'),
-              sendMessageD: () => _sendMessage('D'),
-              sendMessageX: () => _sendMessage('X'),
-              sendMessageZ: () => _sendMessage('Z'),
+              sendMessageA: () => _sendMessage('a'),
+              sendMessageW: () => _sendMessage('w'),
+              sendMessageS: () => _sendMessage('s'),
+              sendMessageD: () => _sendMessage('d'),
+              sendMessageX: () => _sendMessage('n'),
+              sendMessageZ: () => _sendMessage('f'),
             ),
           ),
           Align(

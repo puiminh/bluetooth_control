@@ -3,7 +3,9 @@ import 'package:buzzer_arduino/connection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 
-void main() => runApp(MyApp());
+void main() => {
+  runApp(MyApp())
+};
 
 class MyApp extends StatelessWidget {
   @override
@@ -49,7 +51,7 @@ class Home extends StatelessWidget {
         title: Text("Danh sách kết nối"),
       ),
       body: SelectBondedDevicePage(
-        onCahtPage: (device1) {
+        onChatPage: (device1) {
           BluetoothDevice device = device1;
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return ChatPage(
