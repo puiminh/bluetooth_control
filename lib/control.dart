@@ -73,10 +73,23 @@ class _buzzerPageState extends State<buzzerPage> {
                         },
                         holdWait: timeDelay,
                         child:                       IconButton(
-                          icon: Icon(Icons.stop),
+                          icon: Icon(Icons.search),
                           onPressed: () {
                             
                             widget.sendMessageX();
+                          },
+                        ),
+                      ),
+                      HoldDownButton(
+                        onHoldDown: () {
+                          widget.sendMessageZ();
+                        },
+                        holdWait: timeDelay,
+                        child:                       IconButton(
+                          icon: Icon(Icons.stop),
+                          onPressed: () {
+
+                            widget.sendMessageZ();
                           },
                         ),
                       ),

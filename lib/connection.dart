@@ -9,10 +9,13 @@ import 'device.dart';
 
 class SelectBondedDevicePage extends StatefulWidget {
   final bool? checkAvailability;
-  final Function? onCahtPage;
+  final Function? onChatPage;
 
   SelectBondedDevicePage(
-      {this.checkAvailability = true, required this.onCahtPage});
+      {
+        this.checkAvailability = true,
+        required this.onChatPage
+      });
 
   @override
   _SelectBondedDevicePageState createState() => _SelectBondedDevicePageState();
@@ -24,6 +27,7 @@ enum _DeviceAvailability {
 }
 
 class _DeviceWithAvailability extends BluetoothDevice {
+  // Tạo một lớp mới, lớp này sẽ có một thuộc tính chứa BluetoothDevice
   final BluetoothDevice? device;
   final _DeviceAvailability? availability;
   final int? rssi;
@@ -33,6 +37,7 @@ class _DeviceWithAvailability extends BluetoothDevice {
 }
 
 class _SelectBondedDevicePageState extends State<SelectBondedDevicePage> {
+  // Khởi tạo 1 list
   List<_DeviceWithAvailability> devices = <_DeviceWithAvailability>[];
 
   StreamSubscription<BluetoothDiscoveryResult>? _discoveryStreamSubscription;
@@ -103,7 +108,7 @@ class _SelectBondedDevicePageState extends State<SelectBondedDevicePage> {
             // rssi: _device.rssi,
             // enabled: _device.availability == _DeviceAvailability.yes,
             onTap: () {
-              widget.onCahtPage!(_device.device);
+              widget.onChatPage!(_device.device);
             },
           ),
         )
